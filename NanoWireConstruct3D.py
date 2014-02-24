@@ -1,25 +1,34 @@
 #!/usr/bin/env python
+import numpy as np
 
 class cylinder():
-        axis = [0,1,0]
-        height = 1.0
-        radius = 1.0
-        material = "Ag"
-        center = [0,0,0]
+	self.axis = np.array([0.0,1.0,0.0])
+	self.height = 1.0
+	self.radius = 1.0
+	self.material = "Ag"
+	self.center = np.array([0.0,0.0,0.0])
 
 class sphere():
-        center = [0,0,0]
-        material = "Ag"
-        radius = 1.0
+	self.center = np.array([0.0,0.0,0.0])
+	self.material = "Ag"
+	self.radius = 1.0
 
+class block():
+	self.size = np.array([1.0,1.0,1.0])
+	self.material = "Ag"
+	self.center = np.array([0.0,0.0,0.0])
+
+#Base Parameters, 1.0 unit = 100.0 nm
 CellX = 200.0
 CellY = 300.0
 CellZ = 200.0
-wWire = 5.0
+rWire = 2.5 	#Let's use the radius instead of the diameter, it's a more natural choice
 lSplit = 200.0
 wSplit = 20.0
 lGap = 150.0
-lEllipsoid = 150.0
+tSlab = 10.0	#thickness of the silver slab base
+
+#Derived Parameters
 lWire = (CellY - lSplit)*0.5
 
 #cylinder1
