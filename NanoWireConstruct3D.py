@@ -2,21 +2,47 @@
 import numpy as np
 
 class cylinder():
-	self.axis = np.array([0.0,1.0,0.0])
-	self.height = 1.0
-	self.radius = 1.0
-	self.material = "Ag"
-	self.center = np.array([0.0,0.0,0.0])
+	def __init__(self):
+		self.axis = np.array([0.0,1.0,0.0])
+		self.height = 1.0
+		self.radius = 1.0
+		self.material = "Ag"
+		self.center = np.array([0.0,0.0,0.0])
+
+	def summary(self):
+		objype = "type\tcylinder"
+		cent = "center\t%s" % ",".join([str(x) for x in self.center])
+		rad = "radius\t%f" % self.radius
+		hght = "height\t%f" % self.height
+		mat = "material\t%s" % self.material
+		ax = "axis\t%s" % ",".join([str(x) for x in self.axis])
+		return [objype,cent,rad,hght,ax,mat]
 
 class sphere():
-	self.center = np.array([0.0,0.0,0.0])
-	self.material = "Ag"
-	self.radius = 1.0
+	def __init__(self):
+		self.center = np.array([0.0,0.0,0.0])
+		self.material = "Ag"
+		self.radius = 1.0
+
+	def summary(self):
+		objype = "type\tsphere"
+		cent = "center\t%s" % ",".join([str(x) for x in self.center])
+		rad = "radius\t%f" % self.radius
+		mat = "material\t%s" % self.material
+		return [objype,cent,rad,mat]
 
 class block():
-	self.size = np.array([1.0,1.0,1.0])
-	self.material = "Ag"
-	self.center = np.array([0.0,0.0,0.0])
+	def __init__(self):
+		self.size = np.array([1.0,1.0,1.0])
+		self.material = "Ag"
+		self.center = np.array([0.0,0.0,0.0])	
+
+	def summary(self):
+		objype = "type\tblock"
+		cent = "center\t%s" % ",".join([str(x) for x in self.center])
+		sz = "size\t%s" % ",".join([str(x) for x in self.size])
+		mat = "material\t%s" % self.material
+		return [objype,cent,sz,mat]
 
 #Base Parameters, 1.0 unit = 100.0 nm
 CellX = 200.0
@@ -32,31 +58,44 @@ tSlab = 10.0	#thickness of the silver slab base
 lWire = (CellY - lSplit)*0.5
 
 #cylinder1
-Cyl1= cylinder()
-Cyl1.center = [0,((lSplit+lWire)/2,0]
-Cyl1.height = (CellX-lSplit)/2
+Cyl1 = cylinder()
+Cyl1.center = np.array([0,(lSplit+lWire)/2.0,0.0])
+Cyl1.axis = np.array([0.0, 1.0, 0.0])
+Cyl1.height = lWire
+Cyl1.radius = rWire
 
 #cylinder3
 Cyl3 = cylinder()
-Cly3.center = [.5wSplit+wWire,0,0]
+Cyl3.center = np.array([-0.5*wSplit-rWire,0.0,0.0])
+Cyl3.axis = Cyl1.axis
 Cyl3.height = lGap
-
-#cylinder2
-Cyl2 = cylinder()
-Cyl2.center = [(.5wSplit+wWire)/2,.5((lSplit+lwWire)/2)
-Cly2.height = lGap
-Cyl2.axis = [x-y for x,y zip(Cyl1.center,Cyl3.center)] 
-#Move centers to end of cylinder 1 and 3
+Cyl3.radius = rWire
 
 #sphereA
 SphA = sphere()
-SphA.center = [0,lSplit/2,0]
-SphA.radius = .5wWire
+SphA.center = Cyl1.center - np.array([0.0,lSplit/2.0,0.0])
+SphA.radius = rWire
 
 #sphereB
 SphB = sphere()
-SphB.center = [.5wSplit+wWire,.5lSplit,0]
+SphB.center = Cyl3.center + np.array([0.0,lGap/2.0,0.0])
 SphB.radius = SphA.radius
 
-radius of connectors is same. same as radius of wire
+#cylinder2
+Cyl2 = cylinder()
+Cyl2.center = 0.5*(SphA.center + SphB.center)
+Cyl2.axis = (SphA.center - SphB.center)
+Cyl2.height = np.linalg.norm(Cyl2.axis)
+Cyl2.radius = rWire
+
+#slab
+Slab = block()
+Slab.center = np.array([0.0,0.0,-0.5*tSlab])
+Slab.size = np.array([CellX, CellY, tSlab])
+
+OBJS = [Cyl1,Cyl2,Cyl3,SphA,SphB,Slab]
+for num,obj in enumerate(OBJS): 
+	print("##OBJ%i" % (num+1))
+	print("\n".join(obj.summary()))
+	print("##ENDOBJ%i" % (num+1))
 
