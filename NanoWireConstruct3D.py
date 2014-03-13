@@ -74,7 +74,7 @@ Cyl3.radius = rWire
 
 #sphereA
 SphA = sphere()
-SphA.center = Cyl1.center - np.array([0.0,lSplit/2.0,0.0])
+SphA.center = Cyl1.center - np.array([0.0,lWire/2.0,0.0])
 SphA.radius = rWire
 
 #sphereB
@@ -119,7 +119,7 @@ Cyl6.radius = rWire
 
 #sphereA reflection over xz plane
 SphD = sphere()
-SphD.center = Cyl6.center + np.array([0.0,lSplit/2.0,0.0])
+SphD.center = Cyl6.center + np.array([0.0,lWire/2.0,0.0])
 SphD.radius = rWire
 
 #sphereB reflection over xz plane
