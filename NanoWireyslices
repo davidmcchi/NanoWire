@@ -445,7 +445,8 @@
             )
             (make polarizability
               (omega 0.732593656423)
-
+              (gamma 0.0738804127803)
+              (sigma 0.826552111457)
             )
             (make polarizability
               (omega 1.63649953637)
