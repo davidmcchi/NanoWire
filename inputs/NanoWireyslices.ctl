@@ -501,8 +501,8 @@
         )
       )
       (component Ey)
-      (center 0.0 0.0 40.0)
-      (size 40.0 50.0 0.0)
+      (center 0.0 0.0 30.0)
+      (size 50.0 75.0 0.0)
     )
   )
 )
@@ -511,7 +511,7 @@
     (list
         (make pml
           (direction Z)
-            (thickness 10.0)
+            (thickness 20.0)
         )
     )
 )
