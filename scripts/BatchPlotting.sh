@@ -9,7 +9,6 @@ set pm3d map
 set title "|E|^2"
 set xlabel "Distance / 100 nm"
 set ylabel "Distance / 100 nm"
-set cbr [0:0.04]
 unset key
 set palette defined (0 "yellow", 1 "green", 2 "blue")
 splot "YYYY" every 2 u ($1/10):($2/10):3
@@ -24,7 +23,7 @@ fi
 for H5FILE in $(ls -1 | grep ".h5"); do
 	echo $H5FILE;
 #Get the value for the last time slice
-	NUM=$(h5ls AgFilm-final_dpwr.h5 | awk '{print $5}' | tr -d '\/Inf}');
+	NUM=$(h5ls $H5FILE | awk '{print $5}' | tr -d '\/Inf}');
 	NUM=$(expr $NUM - 1);
 #Convert from h5 to txt file
 	RAWDATA=$(basename $H5FILE .h5)_raw.txt;
