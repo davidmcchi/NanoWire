@@ -1,0 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+filename = "C:\Users\David Chi\Desktop\Summer Quarter\Summer Research\Enthought\AgFilmX-3col.txt"
+
+x = np.genfromtxt(filename,usecols=(0))
+nx = int(max(x)+1)
+
+y = np.genfromtxt(filename,usecols=(1))
+ny = int(max(y)+1)
+
+z = np.genfromtxt(filename,usecols=(2))
+
+data = np.zeros((nx,ny),dtype=float)
+ 
+for X,Y,Z in zip(x,y,z):
+    data[int(X)][int(Y)] = Z
+
+#refer to Boring slide show code
+
+p = plt.imshow(data)
+fig = plt.gcf()
+plt.clim()
+plt.title("FDTD Plotting")
+
+        
+
+#print nx,ny
+
+#plt.imshow(data)
