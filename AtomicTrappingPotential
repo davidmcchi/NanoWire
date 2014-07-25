@@ -4,6 +4,10 @@
 import numpy as np
 import copy
 
+##########################
+# Basic Geometric Objects
+##########################
+
 class cylinder():
 	def __init__(self):
 		self.axis = np.array([0.0,1.0,0.0])
@@ -47,160 +51,63 @@ class block():
 		mat = "material\t%s" % self.material
 		return [objype,cent,sz,mat]
 
-#Nanoshell
-#The nanoshells are silver with a 15 nm radius and 13.65 nm SiO2 core; the trapping light is reddetuned
-#(704 nm) with respect to the plasmon resonance (682 nm) and applied from above with rotating x-y polarized light.		
-class nanoshell():
-       def __init__(self):
-		self.center = np.array([0.0,0.0,0.0])
-		self.materialcore = 3.9 #Dielectric constant for SiO2
-		self.materialshell = "Ag"
-		self.radiuscore = 13.0
-		self.radiusshell = 15.0
-		
-	def summarycore(self):
-		objype = "type\tsphere"
-		cent = "center\t%s" % ",".join([str(x) for x in self.center])
-		rad = "radius\t%f" % self.radiuscore
-		mat = "material\t%s" % self.materialcore
-		return [objype,cent,rad,mat]
-		
-	def summaryshell(self):
-		objype = "type\tsphere"
-		cent = "center\t%s" % ",".join([str(x) for x in self.center])
-		rad = "radius\t%f" % self.radiusshell
-		mat = "material\t%s" % self.materialshell
-		return [objype,cent,rad,mat]
-        
+############################
+# Derived Geometric Objects
+############################
 
+class nanoshell():
+	def __init__(self):
+# Define Objects
+		self.S1 = sphere()
+		self.S2 = sphere()
+# Sphere 1 parameters
+		self.S1.material = 3.9 #Dielectric constant for SiO2
+		self.S1.center = np.array([0.0,0.0])
+		self.S1radius = 13.0
+# Sphere 2 parameters
+		self.S2.center = np.array([0.0,0.0])
+		self.S2.material = "Ag"
+		self.S2radius = 15.0
+
+	def summary(self):
+		return [self.S2.summary(),self.S1.summary()]
+
+##################
+# Main Code
+##################
 
 #Base Parameters, 1.0 unit = 100.0 nm
 CellX = 650.0
 CellY = 400.0
 #resolution start with 1nm
 
+OBJS = []
 
-newobj = copy.deepcopy(oldobj) # deep (recursive) copy
+#Create first nano shell object
+Shell1 = nanoshell()
+Shell1.S1.radius = 13.0
+Shell1.S2.radius = 15.0
+Shell1.S1.center = np.array([-240.0,0.0])
+Shell1.S2.center = np.array([-240.0,0.0])
+OBJS.append(Shell1)
 
-#Nanoshell1
-class nanoshell1(object):
-    radius1 = 
-    radius 2 =
-    xmin = -247.5
-    xmax = -232.5
-    ymin = 0
-    ymax = 15
+#Create 8 copies of nano shell, append to OBJS
+for x in range(1,9):
+	newShell = copy.deepcopy(Shell1)
+	newShell.S1.center = newShell.S2.center = newShell.S1.center + np.array([x*60.0,0])
+	OBJS.append(newShell)
 
-
-
-
-#cylinder1
-Cyl1 = cylinder()
-Cyl1.center = np.array([0,(lSplit+lWire)/2.0,0.0])
-Cyl1.axis = np.array([0.0, 1.0, 0.0])
-Cyl1.height = lWire
-Cyl1.radius = rWire
-
-#cylinder3
-Cyl3 = cylinder()
-Cyl3.center = np.array([0.5*wSplit+rWire,0.0,0.0])
-Cyl3.axis = Cyl1.axis
-Cyl3.height = lGap
-Cyl3.radius = rWire
-
-#sphereA
-SphA = sphere()
-SphA.center = Cyl1.center - np.array([0.0,lWire/2.0,0.0])
-SphA.radius = rWire
-
-#sphereB
-SphB = sphere()
-SphB.center = Cyl3.center + np.array([0.0,lGap/2.0,0.0])
-SphB.radius = SphA.radius
-
-#cylinder2
-Cyl2 = cylinder()
-Cyl2.center = 0.5*(SphA.center + SphB.center)
-Cyl2.axis = (SphA.center - SphB.center)
-Cyl2.height = np.linalg.norm(Cyl2.axis)
-Cyl2.radius = rWire
-
-#(-x,+y)
-#cylinder2 reflection over yz plane
-Cyl4 = cylinder()
-Cyl4.center = np.array([-1.0*Cyl2.center[0],Cyl2.center[1],Cyl2.center[2]])
-Cyl4.axis = np.array([-1.0*Cyl2.axis[0],Cyl2.axis[1],Cyl2.axis[2]])
-Cyl4.height = Cyl2.height
-Cyl4.radius = rWire
-
-#sphereB reflection over yz plane
-SphC = sphere()
-SphC.center = np.array([-1.0*SphB.center[0],SphB.center[1],SphB.center[2]])
-SphC.radius = SphA.radius
-
-#cylinder3 reflection over yz plane
-Cyl5 = cylinder()
-Cyl5.center = np.array([-1.0*Cyl3.center[0],Cyl3.center[1],Cyl3.center[2]])
-Cyl5.axis = Cyl1.axis
-Cyl5.height = lGap
-Cyl5.radius = rWire
-
-"""#(+x,-y)
-#cylinder1 reflection over xz plane
-Cyl6 = cylinder()
-Cyl6.center = np.array([0,-1.0*(lSplit+lWire)/2.0,0.0])
-Cyl6.axis = np.array([0.0, 1.0, 0.0])
-Cyl6.height = lWire
-Cyl6.radius = rWire
-
-#sphereA reflection over xz plane
-SphD = sphere()
-SphD.center = Cyl6.center + np.array([0.0,lWire/2.0,0.0])
-SphD.radius = rWire
-
-#sphereB reflection over xz plane
-SphE = sphere()
-SphE.center = Cyl5.center - np.array([0.0,lGap/2.0,0.0])
-SphE.radius = SphA.radius
-
-#cylinder2 reflection over xz plane
-Cyl7 = cylinder()
-Cyl7.center = 0.5*(SphD.center + SphE.center)
-Cyl7.axis = (SphD.center - SphE.center)
-Cyl7.height = np.linalg.norm(Cyl2.axis)
-Cyl7.radius = rWire"""
-
-#(-x,-y)
-#sphereB reflected through origin
-SphF = sphere()
-SphF.center = np.array([-1.0*SphB.center[0],-1.0*SphB.center[1],SphB.center[2]])
-SphF.radius = SphA.radius
-
-#cylinder2 reflected through origin
-Cyl8 = cylinder()
-Cyl8.center = 0.5*(SphD.center + SphF.center)
-Cyl8.axis = (SphD.center - SphF.center)
-Cyl8.height = np.linalg.norm(Cyl2.axis)
-Cyl8.radius = rWire
-
-#slab
-Slab = block()
-Slab.center = np.array([0.0,0.0,-0.5*tSlab])
-Slab.size = np.array([CellX, CellY, tSlab])
-
-OBJS = [Cyl1,Cyl2,Cyl3,Cyl4,Cyl5,Cyl6,Cyl7,Cyl8,SphA,SphB,SphC,SphD,SphE,SphF,Slab]
-for num,obj in enumerate(OBJS):
-	print("##OBJ%i" % (num+1))
-	print("\n".join(obj.summary()))
-	print("##ENDOBJ%i" % (num+1))
-	
-	
-t = axes.set_title(r'Atomic Trapping Potential for a Single Array (MHz)', fontweight='bold',fontsize=12)
-t.set_y(1.04) 							#Offset the title so it doesn't overlap with the plot
-im = axes.imshow(data, cmap="jet",origin='lower',extent=[xmin,xmax,ymin,ymax])
-im.set_clim(cmin,cmax) 		#Set the colorbar limits
-cbar = figure.colorbar(im, ticks = cticks)
-cbar.ax.set_yticklabels(cticks,fontweight='bold',fontsize=12)
-
-
-plt.show()
+#Print all parameters
+num = 1
+for obj in OBJS:
+	print("##OBJ%i" % num)
+	sumObj = obj.summary()
+	if len(sumObj) == 1:
+		print("\n".join(sumObj))
+		print("##ENDOBJ%i" % num)
+		n += 1
+	else:
+		for item in sumObj:
+			print("\n".join(item))
+			print("##ENDOBJ%i" % num)
+			num += 1
