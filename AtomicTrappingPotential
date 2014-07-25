@@ -2,6 +2,7 @@
 #!/usr/bin/env python
 
 import numpy as np
+import copy
 
 class cylinder():
 	def __init__(self):
@@ -45,35 +46,54 @@ class block():
 		sz = "size\t%s" % ",".join([str(x) for x in self.size])
 		mat = "material\t%s" % self.material
 		return [objype,cent,sz,mat]
-		
-class nanoshell():
-        def __init__(self):
-            self.size = np.array[15,15,15]
-            self.material = "Ag"
-            self.materialcore = "SiO2"
-            self.wavelength = 704
-            self.plasmonresonance = 682
+
 #Nanoshell
 #The nanoshells are silver with a 15 nm radius and 13.65 nm SiO2 core; the trapping light is reddetuned
-#(704 nm) with respect to the plasmon resonance (682 nm) and applied from above with rotating x-y polarized light.
+#(704 nm) with respect to the plasmon resonance (682 nm) and applied from above with rotating x-y polarized light.		
+class nanoshell():
+       def __init__(self):
+		self.center = np.array([0.0,0.0,0.0])
+		self.materialcore = 3.9 #Dielectric constant for SiO2
+		self.materialshell = "Ag"
+		self.radiuscore = 13.0
+		self.radiusshell = 15.0
+		
+	def summarycore(self):
+		objype = "type\tsphere"
+		cent = "center\t%s" % ",".join([str(x) for x in self.center])
+		rad = "radius\t%f" % self.radiuscore
+		mat = "material\t%s" % self.materialcore
+		return [objype,cent,rad,mat]
+		
+	def summaryshell(self):
+		objype = "type\tsphere"
+		cent = "center\t%s" % ",".join([str(x) for x in self.center])
+		rad = "radius\t%f" % self.radiusshell
+		mat = "material\t%s" % self.materialshell
+		return [objype,cent,rad,mat]
+        
+
 
 #Base Parameters, 1.0 unit = 100.0 nm
-CellX = 45.0
-CellY = 45.0
-CellZ = 75.0
-"""rWire = 2.5 	#Let's use the radius instead of the diameter, it's a more natural choice
-lSplit = 200.0
-wSplit = 20.0"""
-lGap = 60.0
-tSlab = 10.0	#thickness of the silver slab base
+CellX = 650.0
+CellY = 400.0
+#resolution start with 1nm
+
+
+newobj = copy.deepcopy(oldobj) # deep (recursive) copy
+
+#Nanoshell1
+class nanoshell1(object):
+    radius1 = 
+    radius 2 =
+    xmin = -247.5
+    xmax = -232.5
+    ymin = 0
+    ymax = 15
 
 
 
 
-"""#Derived Parameters
-lWire = (CellY - lSplit)*0.5"""
-
-#(+x,+y)
 #cylinder1
 Cyl1 = cylinder()
 Cyl1.center = np.array([0,(lSplit+lWire)/2.0,0.0])
