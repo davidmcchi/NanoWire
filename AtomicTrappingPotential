@@ -97,6 +97,20 @@ for x in range(1,9):
 	newShell.S1.center = newShell.S2.center = newShell.S1.center + np.array([x*60.0,0])
 	OBJS.append(newShell)
 
+#Define slab
+# class slab():
+# 	def __init__(self):
+# 		self.size = np.array([550.0,100.0])
+# 		self.material = "Ag"
+# 		self.center = np.array([0.0,-50.0])
+
+# 	def summary(self):
+# 		objype = "type\tblock"
+# 		cent = "center\t%s" % ",".join([str(x) for x in self.center])
+# 		sz = "size\t%s" % ",".join([str(x) for x in self.size])
+# 		mat = "material\t%s" % self.material
+# 		return [objype,cent,sz,mat]
+
 #Print all parameters
 num = 1
 for obj in OBJS:
@@ -107,64 +121,32 @@ for obj in OBJS:
 		print("##ENDOBJ%i" % num)
 		n += 1
 	else:
+		first = True
 		for item in sumObj:
+			if not first:
+				print("##OBJ%i" % num)
 			print("\n".join(item))
 			print("##ENDOBJ%i" % num)
 			num += 1
-#Define slab
-class slab():
-	def __init__(self):
-		self.size = np.array([400.0,100.0])
-		self.material = "Ag"
-		self.center = np.array([325.0,100.0])
+			first = False
 
-	def summary(self):
-		objype = "type\tblock"
-		cent = "center\t%s" % ",".join([str(x) for x in self.center])
-		sz = "size\t%s" % ",".join([str(x) for x in self.size])
-		mat = "material\t%s" % self.material
-		return [objype,cent,sz,mat]
+slab          = block()
+slab.size     = np.array([550.0,100.0])
+slab.material = "Ag"
+slab.center   = np.array([0.0,-50.0])
+
 OBJS.append(slab)
+print("##OBJ%i" % num)
+print("\n".join(slab.summary()))
+print("##ENDOBJ%i" % num)
+num += 1
 
-#Define light source
-(set! sources (list
-               (make source
-                 (src (make continuous-src (frequency 0.15)))
-                    (wavelength 5.32)
-                    (start-time 0.0)
-                    (width 2.0)
-                 (component Ey)
-                 (center 325.0,0)
-                 (size 50.0,75.0)
-                )
-            )
-        )
+# #Title and printing
+# t = OBJ.set_title(r'$\mathbf{|\vec{E}|^2/ |\vec E_0|^2}$', fontweight='bold',fontsize=12)
+# t.set_y(1.04) 							#Offset the title so it doesn't overlap with the plot
+# im = OBJ.imshow(data, cmap="jet",origin='lower',extent=[xmin,xmax,ymin,ymax])
+# im.set_clim(cmin,cmax) 		#Set the colorbar limits
+# cbar = figure.colorbar(im, ticks = cticks)
+# cbar.ax.set_yticklabels(cticks,fontweight='bold',fontsize=12)
 
-(set! pml-layers
-    (list
-        (make pml
-          (direction Y)
-            (thickness 100.0)
-        )
-    )
-)
-
-(set! resolution 10)
-
-(set! k-point
-;may need to adjust k point for source periodicity
-    (vector3 0.0 0.0 )
-)
-(run-until 200
-           (at-beginning output-epsilon)
-           (at-end output-efield-z))
-
-#Title and printing
-t = OBJ.set_title(r'$\mathbf{|\vec{E}|^2/ |\vec E_0|^2}$', fontweight='bold',fontsize=12)
-t.set_y(1.04) 							#Offset the title so it doesn't overlap with the plot
-im = OBJ.imshow(data, cmap="jet",origin='lower',extent=[xmin,xmax,ymin,ymax])
-im.set_clim(cmin,cmax) 		#Set the colorbar limits
-cbar = figure.colorbar(im, ticks = cticks)
-cbar.ax.set_yticklabels(cticks,fontweight='bold',fontsize=12)
-
-plt.show()
+# plt.show()
