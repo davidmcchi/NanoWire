@@ -35,5 +35,28 @@ fieldPower = fieldPower[:-1, :-1]
 
 # I'll show you how to plot the data later, but for now, everything you need is in x,y, and fieldPower
 # Your code for finding the local maxima should go here
+int findMax( int[][] data ) { 
+
+// Return if data is empty 
+if( data.length 0 ) { 
+return 0; 
+} 
+
+int max = data[0][0]; 
+
+// Iterate through each element in the array 
+for( int r = 0; r < data.length; ++r ) { 
+for( int c = 0; c < data[0].length; ++c ) { 
+
+// If we find a value greater than the current max, update max 
+if( data[r][c] > max ) { 
+max = data[r][c]; 
+} 
+
+} 
+} 
+
+return max; 
+
 # Google things if you get stuck, such as "how to find maximum values of a 2D data set"
 # Otherwise, let's plan on meeting Friday
